@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Africa Aviator Signals</title>
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#0f172a;
+  color:white;
+  text-align:center;
+}
+header{
+  background:#020617;
+  padding:30px;
+}
+header h1{
+  margin:0;
+  font-size:32px;
+}
+.container{
+  padding:20px;
+}
+.card{
+  background:#1e293b;
+  padding:25px;
+  margin:20px auto;
+  max-width:400px;
+  border-radius:10px;
+  box-shadow:0 0 15px rgba(0,0,0,0.4);
+}
+button{
+  background:#22c55e;
+  border:none;
+  padding:12px 20px;
+  color:white;
+  font-size:16px;
+  border-radius:6px;
+  cursor:pointer;
+  margin-top:10px;
+  width:90%;
+}
+button:hover{
+  background:#16a34a;
+}
+input{
+  width:90%;
+  padding:10px;
+  margin:10px 0;
+  border-radius:6px;
+  border:none;
+}
+.signal{
+  font-size:28px;
+  color:#22c55e;
+}
+ul{
+  list-style:none;
+  padding:0;
+}
+footer{
+  margin-top:40px;
+  padding:20px;
+  background:#020617;
+}
+.whatsapp-float{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#25D366;
+  color:white;
+  padding:14px 18px;
+  border-radius:50px;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 0 10px rgba(0,0,0,0.4);
+  z-index:9999;
+}
+.hidden{display:none;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>✈ Africa Aviator Signals</h1>
+<p>Premium Aviator Signals • VIP Trading Community</p>
+</header>
+
+<div class="container">
+
+<!-- Landing / VIP Login -->
+<div class="card" id="landingCard">
+  <h2>VIP Members Area</h2>
+  <p>Access premium signals and signal history.</p>
+  <input id="user" placeholder="Username"><br>
+  <input id="pass" type="password" placeholder="Password"><br>
+  <button onclick="login()">VIP LOGIN</button>
+  <p id="msg"></p>
+</div>
+
+<!-- Signals Dashboard -->
+<div id="dashboardCard" class="card hidden">
+  <h2>Latest Signal</h2>
+  <div id="latestSignal" class="signal">Waiting next round</div>
+  
+  <h2>Signal History</h2>
+  <ul id="history"></ul>
+  
+  <h2>Statistics</h2>
+  <p>Wins: <span id="wins">0</span></p>
+  <p>Losses: <span id="losses">0</span></p>
+  <p>Accuracy: <span id="accuracy">0%</span></p>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminCard" class="card hidden">
+  <h2>Admin Panel</h2>
+  <input id="signalInput" placeholder="Enter signal (example 2.20x ✅)"><br>
+  <button onclick="postSignal()">Post Signal</button>
+</div>
+
+<!-- VIP Subscription / Channels -->
+<div class="card">
+  <h2>VIP Subscription & Account Management</h2>
+  <p>Join our VIP group to receive premium signals and professional account management.</p>
+  <a href="https://wa.me/254741216552"><button>Contact Us Now</button></a>
+</div>
+
+<div class="card">
+  <h2>Join Our Channels</h2>
+  <p>Follow for free signals and updates:</p>
+  <a href="https://whatsapp.com/channel/0029VbBw9Mm8vd1Gv1wwVd1r"><button>WhatsApp Channel</button></a><br><br>
+  <a href="https://t.me/+3Hz-BIccbYVmMTI8"><button>Telegram Channel</button></a>
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 Africa Aviator Signals</p>
+</footer>
+
+<a href="https://wa.me/254741216552" class="whatsapp-float">💬 WhatsApp Us</a>
+
+<script>
+// SIGNAL STORAGE
+let historyData = JSON.parse(localStorage.getItem("signals")) || [];
+
+// LOGIN FUNCTION
+function login(){
+  let password = document.getElementById("pass").value;
+  if(password === "462355"){
+    document.getElementById("landingCard").classList.add("hidden");
+    document.getElementById("dashboardCard").classList.remove("hidden");
+    document.getElementById("adminCard").classList.remove("hidden");
+    updateDashboard();
+  } else {
+    document.getElementById("msg").innerText="Wrong password";
+  }
+}
+
+// POST SIGNAL (Admin)
+function postSignal(){
+  let sig = document.getElementById("signalInput").value;
+  if(sig){
+    historyData.unshift(sig);
+    localStorage.setItem("signals", JSON.stringify(historyData));
+    updateDashboard();
+    alert("Signal posted!");
+  }
+}
+
+// UPDATE DASHBOARD
+function updateDashboard(){
+  const latestEl = document.getElementById("latestSignal");
+  const historyEl = document.getElementById("history");
+  const winsEl = document.getElementById("wins");
+  const lossesEl = document.getElementById("losses");
+  const accuracyEl = document.getElementById("accuracy");
+
+  if(latestEl) latestEl.innerText = historyData[0] || "Waiting next round";
+
+  if(historyEl){
+    historyEl.innerHTML = "";
+    historyData.forEach(sig=>{
+      let li = document.createElement("li");
+      li.innerText = sig;
+      li.style.color = sig.includes("✅") ? "#22c55e" : "#ef4444";
+      historyEl.appendChild(li);
+    });
+  }
+
+  let wins = historyData.filter(s => s.includes("✅")).length;
+  let losses = historyData.filter(s => s.includes("❌")).length;
+  let accuracy = historyData.length ? Math.round((wins/historyData.length)*100) : 0;
+  if(winsEl) winsEl.innerText = wins;
+  if(lossesEl) lossesEl.innerText = losses;
+  if(accuracyEl) accuracyEl.innerText = accuracy + "%";
+}
+
+// AUTO-REFRESH EVERY 5 SECONDS
+setInterval(() => {
+  historyData = JSON.parse(localStorage.getItem("signals")) || [];
+  if(document.getElementById("dashboardCard").classList.contains("hidden") === false){
+    updateDashboard();
+  }
+}, 5000);
+
+// INITIAL DASHBOARD UPDATE
+updateDashboard();
+</script>
+
+</body>
+</html>
